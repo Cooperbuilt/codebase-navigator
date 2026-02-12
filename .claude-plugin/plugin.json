@@ -1,0 +1,6 @@
+{
+  "name": "codebase-navigator",
+  "version": "0.1.0",
+  "description": "Ask questions about your codebase and infrastructure without bothering engineers. Self-service code Q&A, customer case investigation, and codebase health audits — calibrated for semi-technical stakeholders.",
+  "author": "codebase-navigator contributors"
+}

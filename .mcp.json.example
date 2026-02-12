@@ -1,0 +1,53 @@
+{
+  "_comment": [
+    "Copy this file to .mcp.json and configure the servers you need.",
+    "Only ~~code repository (github) is required. Others are optional.",
+    "See CONNECTORS.md for details on each connector category."
+  ],
+
+  "mcpServers": {
+
+    "github": {
+      "_category": "~~code repository",
+      "_docs": "https://github.com/github/github-mcp-server",
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "-e", "GITHUB_READ_ONLY=1",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_TOKEN_HERE"
+      }
+    },
+
+    "aws-cloudwatch": {
+      "_category": "~~cloud observability",
+      "_docs": "https://awslabs.github.io/mcp/servers/cloudwatch-mcp-server",
+      "_optional": true,
+      "command": "uvx",
+      "args": [
+        "awslabs.cloudwatch-mcp-server@latest"
+      ],
+      "env": {
+        "AWS_PROFILE": "your-readonly-profile",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+
+    "aws-cfn": {
+      "_category": "~~cloud resources",
+      "_docs": "https://awslabs.github.io/mcp/servers/cfn-mcp-server",
+      "_optional": true,
+      "command": "uvx",
+      "args": [
+        "awslabs.cfn-mcp-server@latest",
+        "--readonly"
+      ],
+      "env": {
+        "AWS_PROFILE": "your-readonly-profile"
+      }
+    }
+  }
+}
