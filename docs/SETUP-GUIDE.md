@@ -28,29 +28,24 @@ AWS access enables live log/metric queries and deployed resource inspection. Ski
 
 **Send this message to your engineering team:**
 
-> Hi! I'm setting up a read-only tool to investigate codebase questions without bothering you. Could you create a read-only AWS IAM user or SSO profile for me with these permissions?
+> Hi! I'm setting up a read-only tool to investigate codebase questions without bothering you. Could you create a read-only AWS IAM user for me with these permissions?
 >
 > - CloudWatch Logs: read-only (logs:Describe*, logs:Get*, logs:FilterLogEvents)
 > - CloudWatch Metrics: read-only (cloudwatch:Get*, cloudwatch:List*, cloudwatch:Describe*)
 > - CloudFormation: read-only (cloudformation:Describe*, cloudformation:Get*, cloudformation:List*)
 >
-> I just need an AWS CLI profile name, access key, and the region to use. Thanks!
+> I need an **access key ID**, **secret access key**, and the **AWS region** to use. Thanks!
 
-Once you have credentials, configure them:
-
-```
-aws configure --profile <profile-name-they-gave-you>
-```
-
-Enter the access key ID, secret access key, and region when prompted.
+Hold onto those three values — you'll paste them into `.mcp.json` in the next step.
 
 ## Step 3: Configure MCP Servers
 
 Open `.mcp.json` in the project root and replace the placeholders:
 
 - `<YOUR_GITHUB_PAT>` — The token from Step 1 (in the `Authorization` header value, after `Bearer `)
-- `<YOUR_AWS_PROFILE>` — The AWS profile name from Step 2 (e.g., `codebase-navigator`)
-- `<YOUR_REGION>` — The AWS region (e.g., `us-east-1`)
+- `<YOUR_AWS_ACCESS_KEY_ID>` — The access key ID from Step 2
+- `<YOUR_AWS_SECRET_ACCESS_KEY>` — The secret access key from Step 2
+- `<YOUR_AWS_REGION>` — The AWS region from Step 2 (e.g., `us-east-1`)
 
 If you're skipping AWS, delete the `aws-cloudwatch` and `aws-cfn` entries from the file entirely.
 
@@ -79,8 +74,8 @@ After setup, try `/ask what repositories do I have access to?` to verify everyth
 
 **AWS MCP won't connect**
 - Is `uv` installed? Run `uv --version` in Terminal.
-- Is the profile correct? Run `aws sts get-caller-identity --profile <your-profile>` to test.
-- Is the region correct? Check with your engineering team.
+- Are the credentials correct? Double-check the access key ID, secret access key, and region with your engineering team.
+- Are there extra spaces or missing quotes in `.mcp.json`? Each value should be wrapped in double quotes with no leading/trailing spaces inside.
 
 **"Config files not found" warnings**
 - Run `/setup` to generate them. This is expected on first use.
