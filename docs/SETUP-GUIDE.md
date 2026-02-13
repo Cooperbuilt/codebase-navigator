@@ -1,0 +1,91 @@
+# Setup Guide
+
+Get Codebase Navigator running in Cowork. Total setup time: ~15 minutes.
+
+## Prerequisites
+
+1. **Cowork app** — Download from [claude.ai/download](https://claude.ai/download) if you don't have it
+2. **Docker Desktop** — Required for the GitHub MCP server. Download from [docker.com](https://www.docker.com/products/docker-desktop/). Make sure it's running.
+3. **uv** (optional, for AWS MCP servers) — Install with:
+   ```
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+## Step 1: GitHub Token
+
+You need a read-only GitHub Personal Access Token (PAT).
+
+1. Go to [github.com/settings/tokens](https://github.com/settings/tokens)
+2. Click **Generate new token (classic)**
+3. Name it something like `codebase-navigator-readonly`
+4. Set expiration (90 days recommended)
+5. Select scopes: **`repo`** (Full control of private repositories — needed for read access to private repos)
+6. Click **Generate token**
+7. Copy the token — you'll need it in Step 3
+
+## Step 2: AWS Credentials (Optional)
+
+AWS access enables live log/metric queries and deployed resource inspection. Skip this step if you only need code access.
+
+**Send this message to your engineering team:**
+
+> Hi! I'm setting up a read-only tool to investigate codebase questions without bothering you. Could you create a read-only AWS IAM user or SSO profile for me with these permissions?
+>
+> - CloudWatch Logs: read-only (logs:Describe*, logs:Get*, logs:FilterLogEvents)
+> - CloudWatch Metrics: read-only (cloudwatch:Get*, cloudwatch:List*, cloudwatch:Describe*)
+> - CloudFormation: read-only (cloudformation:Describe*, cloudformation:Get*, cloudformation:List*)
+>
+> I just need an AWS CLI profile name, access key, and the region to use. Thanks!
+
+Once you have credentials, configure them:
+
+```
+aws configure --profile <profile-name-they-gave-you>
+```
+
+Enter the access key ID, secret access key, and region when prompted.
+
+## Step 3: Configure MCP Servers
+
+Open `.mcp.json` in the project root and replace the placeholders:
+
+- `<YOUR_GITHUB_PAT>` — The token from Step 1
+- `<YOUR_AWS_PROFILE>` — The AWS profile name from Step 2 (e.g., `codebase-navigator`)
+- `<YOUR_REGION>` — The AWS region (e.g., `us-east-1`)
+
+If you're skipping AWS, delete the `aws-cloudwatch` and `aws-cfn` entries from the file entirely.
+
+## Step 4: Open in Cowork
+
+1. Open the Cowork app
+2. Open this project folder (`codebase-navigator/`)
+3. Check that MCP server indicators show green in the bottom bar
+   - GitHub should always be green
+   - AWS servers are green only if you configured them in Step 2-3
+
+## Step 5: Run Setup
+
+Type `/setup` in the chat. This will:
+- Scan your GitHub repos
+- Ask which ones to include
+- Generate config files with your team's specific context
+
+After setup, try `/ask what repositories do I have access to?` to verify everything works.
+
+## Troubleshooting
+
+**GitHub MCP won't connect**
+- Is Docker Desktop running? Check the Docker icon in your menu bar.
+- Is the token correct? Try `docker run --rm -e GITHUB_PERSONAL_ACCESS_TOKEN=<your-token> ghcr.io/github/github-mcp-server` in Terminal to test.
+
+**AWS MCP won't connect**
+- Is `uv` installed? Run `uv --version` in Terminal.
+- Is the profile correct? Run `aws sts get-caller-identity --profile <your-profile>` to test.
+- Is the region correct? Check with your engineering team.
+
+**"Config files not found" warnings**
+- Run `/setup` to generate them. This is expected on first use.
+
+**MCP servers show red/disconnected**
+- Close and reopen the project in Cowork
+- Check that `.mcp.json` has no syntax errors (no trailing commas, all quotes matched)

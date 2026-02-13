@@ -12,7 +12,7 @@ Before answering, silently perform these steps:
 
 ### Step 1: Gather Context First
 
-Search ~~code repository for terms in the user's question BEFORE deciding whether to clarify. Use file names, function names, class names, config keys, and service names mentioned or implied. This context informs whether the question is well-formed or misdirected.
+Use the GitHub MCP server to search for terms in the user's question BEFORE deciding whether to clarify. Search file names, function names, class names, config keys, and service names mentioned or implied. This context informs whether the question is well-formed or misdirected.
 
 ### Step 2: Classify the Question
 
@@ -35,9 +35,9 @@ Assign one of three classifications:
 
 ### Step 3: Act on Classification
 
-**CLEAR** → Proceed to answer. No preamble about the classification.
+**CLEAR** — Proceed to answer. No preamble about the classification.
 
-**AMBIGUOUS** → Offer 2-3 reframings as concrete options. Format:
+**AMBIGUOUS** — Offer 2-3 reframings as concrete options:
 
 ```
 I found [what you found in the code]. To give you the most useful answer, which of these are you after?
@@ -49,12 +49,12 @@ I found [what you found in the code]. To give you the most useful answer, which 
 Or just say "all of the above" or tell me what I'm missing.
 ```
 
-Each reframing must reference actual code/infrastructure context discovered in Step 1. Never offer generic reframings disconnected from the codebase.
+Each reframing must reference actual code/infrastructure context discovered in Step 1.
 
-**MISDIRECTED** → Gently correct the false assumption with evidence, then offer the right question:
+**MISDIRECTED** — Gently correct the false assumption with evidence, then offer the right question:
 
 ```
-Quick note: [the thing they assumed] actually works differently — [brief evidence from code]. 
+Quick note: [the thing they assumed] actually works differently — [brief evidence from code].
 
 You might be looking for: [reframed question based on how it actually works]
 
@@ -64,7 +64,7 @@ Want me to go with that, or were you asking about something else?
 ## Critical Constraints
 
 - Never classify more than 20% of questions as AMBIGUOUS or MISDIRECTED. Most questions have a reasonable default interpretation — use it.
-- Never ask more than one round of clarification. If the user answers your clarification, proceed with the answer even if residual ambiguity remains.
-- If the user says "just answer it" or expresses impatience with clarification, immediately proceed with the most likely interpretation. Note your assumption briefly.
-- Clarification questions must demonstrate that you already looked at the code. "What do you mean by the API?" is lazy. "We have three APIs — the public REST API in `api-gateway`, the internal gRPC service in `worker-service`, and the webhook handler in `integrations`. Which one?" is useful.
+- Never ask more than one round of clarification. If the user answers, proceed even if residual ambiguity remains.
+- If the user says "just answer it" or expresses impatience, immediately proceed with the most likely interpretation. Note your assumption briefly.
+- Clarification questions must demonstrate you already looked at the code. "What do you mean by the API?" is lazy. "We have three APIs — the public REST API in `api-gateway`, the internal gRPC service in `worker-service`, and the webhook handler in `integrations`. Which one?" is useful.
 - Do not explain the XY problem concept to the user. Do not say "this might be an XY problem." Just do the reframing naturally.
