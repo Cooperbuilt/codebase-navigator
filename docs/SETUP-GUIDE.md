@@ -5,8 +5,7 @@ Get Codebase Navigator running in Cowork. Total setup time: ~15 minutes.
 ## Prerequisites
 
 1. **Cowork app** — Download from [claude.ai/download](https://claude.ai/download) if you don't have it
-2. **Docker Desktop** — Required for the GitHub MCP server. Download from [docker.com](https://www.docker.com/products/docker-desktop/). Make sure it's running.
-3. **uv** (optional, for AWS MCP servers) — Install with:
+2. **uv** (optional, for AWS MCP servers) — Install with:
    ```
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
@@ -49,7 +48,7 @@ Enter the access key ID, secret access key, and region when prompted.
 
 Open `.mcp.json` in the project root and replace the placeholders:
 
-- `<YOUR_GITHUB_PAT>` — The token from Step 1
+- `<YOUR_GITHUB_PAT>` — The token from Step 1 (in the `Authorization` header value, after `Bearer `)
 - `<YOUR_AWS_PROFILE>` — The AWS profile name from Step 2 (e.g., `codebase-navigator`)
 - `<YOUR_REGION>` — The AWS region (e.g., `us-east-1`)
 
@@ -75,8 +74,8 @@ After setup, try `/ask what repositories do I have access to?` to verify everyth
 ## Troubleshooting
 
 **GitHub MCP won't connect**
-- Is Docker Desktop running? Check the Docker icon in your menu bar.
-- Is the token correct? Try `docker run --rm -e GITHUB_PERSONAL_ACCESS_TOKEN=<your-token> ghcr.io/github/github-mcp-server` in Terminal to test.
+- Is the token correct? Verify it by running `curl -H "Authorization: Bearer <your-token>" https://api.github.com/user` in Terminal — you should see your GitHub username in the response.
+- Does the token have the `repo` scope? Tokens without it can't access private repositories.
 
 **AWS MCP won't connect**
 - Is `uv` installed? Run `uv --version` in Terminal.

@@ -33,7 +33,6 @@ GitHub is required. AWS servers are optional and add live infrastructure context
 
 See [docs/SETUP-GUIDE.md](docs/SETUP-GUIDE.md) for a step-by-step guide. You'll need:
 - Cowork app
-- Docker Desktop (for GitHub MCP)
 - A read-only GitHub PAT
 - (Optional) Read-only AWS credentials from your engineering team
 
