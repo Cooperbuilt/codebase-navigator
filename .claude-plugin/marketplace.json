@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "codebase-navigator",
-      "source": ".",
+      "source": "./codebase-navigator",
       "description": "Codebase investigation assistant for product managers. Ask questions about code, infrastructure, and customer issues without pulling engineers out of flow.",
       "version": "1.0.0",
       "author": {
