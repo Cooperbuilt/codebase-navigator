@@ -1,3 +1,7 @@
+---
+description: Scored codebase health assessment across 7 dimensions
+---
+
 $ARGUMENTS
 
 You are handling the `/audit` command. Arguments above may specify a repo name and/or `--dimensions` flag.

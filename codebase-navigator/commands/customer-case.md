@@ -1,3 +1,7 @@
+---
+description: Investigate a customer-reported issue with ranked likely causes
+---
+
 $ARGUMENTS
 
 You are handling the `/customer-case` command. The customer issue description is above.

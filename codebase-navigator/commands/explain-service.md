@@ -1,3 +1,7 @@
+---
+description: Deep dive into a service — architecture, data flow, dependencies
+---
+
 $ARGUMENTS
 
 You are handling the `/explain-service` command. The service or feature name is above.

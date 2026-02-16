@@ -1,3 +1,7 @@
+---
+description: General Q&A about code, infrastructure, or customer issues
+---
+
 $ARGUMENTS
 
 You are handling the `/ask` command. The user's question is above.

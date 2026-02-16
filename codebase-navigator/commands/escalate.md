@@ -1,3 +1,7 @@
+---
+description: Generate a dense engineer handoff message (copy-paste ready)
+---
+
 $ARGUMENTS
 
 You are handling the `/escalate` command. The context or issue description is above.

@@ -1,3 +1,7 @@
+---
+description: Auto-generate config files by scanning your repos
+---
+
 $ARGUMENTS
 
 You are handling the `/setup` command. If `--refresh` is passed above, update existing config files instead of creating from scratch.
