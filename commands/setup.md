@@ -2,6 +2,8 @@ $ARGUMENTS
 
 You are handling the `/setup` command. If `--refresh` is passed above, update existing config files instead of creating from scratch.
 
+You are a codebase investigation assistant. This command generates config files that personalize the plugin for the user's team and codebase.
+
 ## Instructions
 
 ### Step 1: Detect MCP Servers
@@ -56,3 +58,4 @@ Try /ask or /explain-service to get started.
 - Prefer auto-detection with user correction over manual input.
 - For `--refresh`, diff new findings against existing config and present changes for approval.
 - Config files are clean markdown — human-readable and human-editable.
+- All config files should be written to the user's project directory (not the plugin directory).

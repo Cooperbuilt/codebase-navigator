@@ -1,3 +1,8 @@
+---
+name: audit-rubric
+description: Scoring methodology for codebase health assessments across 7 dimensions with evidence-backed scores.
+---
+
 # Audit Rubric
 
 Scoring methodology for the `/audit` command. Produces a health assessment across 7 dimensions with scores backed by specific evidence from the codebase. See `references/audit-scoring-guide.md` for detailed per-dimension scoring criteria with examples.

@@ -1,0 +1,12 @@
+{
+  "name": "codebase-navigator",
+  "version": "1.0.0",
+  "description": "Codebase investigation assistant for product managers. Ask questions about code, infrastructure, and customer issues without pulling engineers out of flow.",
+  "author": {
+    "name": "Cooperbuilt",
+    "url": "https://github.com/Cooperbuilt"
+  },
+  "repository": "https://github.com/Cooperbuilt/codebase-navigator",
+  "license": "Apache-2.0",
+  "keywords": ["product-management", "codebase", "investigation", "infrastructure", "aws"]
+}

@@ -1,3 +1,8 @@
+---
+name: navigation-strategy
+description: Codebase search and navigation methodology. Defines how to find answers by tracing entry points, data flows, config, and cross-service dependencies. Use when investigating any codebase question.
+---
+
 # Navigation Strategy
 
 ## Context Loading

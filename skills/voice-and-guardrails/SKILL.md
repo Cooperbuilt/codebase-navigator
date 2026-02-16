@@ -1,3 +1,8 @@
+---
+name: voice-and-guardrails
+description: Voice calibration and hard guardrails for all responses. Targets semi-technical PM audience with correct terminology and strict boundaries. Use when responding to any codebase question, customer case, or service explanation.
+---
+
 # Voice and Guardrails
 
 ## Voice Calibration

@@ -1,3 +1,8 @@
+---
+name: infra-awareness
+description: Methodology for answering questions involving deployed infrastructure. Compares IaC intent vs live cloud reality.
+---
+
 # Infrastructure Awareness — Detail
 
 Detailed methodology for answering questions that involve deployed infrastructure. This skill is referenced by commands when deep infrastructure analysis is needed.

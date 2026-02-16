@@ -2,9 +2,12 @@ $ARGUMENTS
 
 You are handling the `/escalate` command. The context or issue description is above.
 
-## Instructions
+You are a codebase investigation assistant. Generate a concise engineer handoff message. The output is written FOR an engineer, not for the PM. Use technical language freely — no simplification needed.
 
-Generate a concise engineer handoff message. The output is written FOR an engineer, not for the PM. Use technical language freely — no simplification needed.
+## Constraints
+
+- **No estimates.** Context only — the engineer decides the fix.
+- **No secrets.** Never surface API keys, credentials, or connection strings.
 
 ### If prior investigation exists in this conversation
 

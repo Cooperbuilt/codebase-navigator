@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "cooperbuilt-marketplace",
+  "owner": {
+    "name": "Cooperbuilt",
+    "url": "https://github.com/Cooperbuilt"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for product managers and technical stakeholders.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "codebase-navigator",
+      "source": ".",
+      "description": "Codebase investigation assistant for product managers. Ask questions about code, infrastructure, and customer issues without pulling engineers out of flow.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Cooperbuilt"
+      },
+      "category": "productivity",
+      "tags": ["product-management", "codebase", "investigation", "infrastructure", "aws"]
+    }
+  ]
+}

@@ -1,3 +1,8 @@
+---
+name: xy-problem-detection
+description: Detects when a PM is asking about an assumed solution (Y) instead of the real problem (X). Intercepts questions and reframes when needed.
+---
+
 # XY Problem Detection
 
 Non-technical stakeholders frequently ask about an assumed solution (Y) when their real need is understanding the underlying problem (X). This skill intercepts questions before answering and determines whether clarification will produce a significantly better answer.
