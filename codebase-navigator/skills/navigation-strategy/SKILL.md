@@ -65,7 +65,7 @@ If the answer spans multiple services:
 
 ## Infrastructure Reconciliation
 
-When both IaC files and live cloud access (CloudWatch, CloudFormation MCP) are available:
+When both IaC files and live cloud access (AWS API MCP Server extension) are available:
 - **Intent (IaC)** — What was designed: resource types, configurations, relationships
 - **Reality (Live)** — What actually exists: current state, runtime behavior, metrics
 - **Divergence** — When intent and reality differ, surface it. This often IS the answer.
@@ -76,9 +76,9 @@ Example: "The Terraform config declares a 5-minute timeout, but the live functio
 
 | Available Sources | Behavior |
 |---|---|
-| Local repos + CloudWatch + CloudFormation | Full capability. Compare intent vs reality. Include live metrics. |
+| Local repos + AWS API extension | Full capability. Compare intent vs reality. Include live metrics. |
 | Local repos + IaC files only | Answer from intended architecture. Note: can't verify live state. |
-| Local repos only | Answer from code. Note what cloud access would add. |
+| Local repos only | Answer from code. Note what AWS access would add. |
 
 Never refuse because a source is unavailable. Provide the best answer with available context and note what's missing.
 

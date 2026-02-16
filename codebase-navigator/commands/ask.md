@@ -46,7 +46,7 @@ If `repos/` doesn't exist or is empty, tell the user to run `/setup` first.
    - Configuration (env vars, feature flags, IaC config, CI/CD)
    - Cross-service references (communication patterns, data passed between services)
 
-3. **Check infrastructure context.** If the AWS CloudWatch or CloudFormation MCP servers are available, cross-reference code findings with live infrastructure state. Surface any divergence between IaC intent and live reality.
+3. **Check infrastructure context.** If the AWS API MCP Server extension is available, cross-reference code findings with live infrastructure state (CloudWatch logs/metrics, CloudFormation resources). Surface any divergence between IaC intent and live reality.
 
 4. **Compose the answer.** Match format to complexity:
    - **Simple factual** — 2-4 sentences with a file reference

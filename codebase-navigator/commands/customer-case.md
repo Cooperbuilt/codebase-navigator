@@ -47,7 +47,7 @@ If `repos/` doesn't exist or is empty, tell the user to run `/setup` first.
    - Feature flags or config that could change behavior
    - Recent code changes to the relevant paths (check commit history with `git -C repos/<repo> log --oneline -20 -- <file>`)
 
-4. **Check infrastructure** (if AWS CloudWatch MCP is available):
+4. **Check infrastructure** (if the AWS API MCP Server extension is available):
    - Recent errors or exceptions in relevant services
    - Metric anomalies around the reported timeframe
    - Alarm state changes
@@ -74,7 +74,7 @@ On first question in a session, check if `config/repos.md`, `config/services.md`
 ## Notes
 
 - This command is NOT for live debugging. It builds a hypothesis from code and available data that an engineer can verify.
-- If AWS CloudWatch MCP is not available, be explicit: "I can show you the code paths that could cause this, but I can't check live logs or metrics."
+- If the AWS API extension is not available, be explicit: "I can show you the code paths that could cause this, but I can't check live logs or metrics."
 - Never speculate about data-level issues without code evidence. Describe the code behavior that could produce the symptom.
 - Time-sensitive language ("since yesterday," "started Tuesday") is a signal to check recent commits and infrastructure changes in that window.
 - If the investigation warrants engineering follow-up, suggest using `/escalate` to generate a handoff message.

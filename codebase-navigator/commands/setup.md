@@ -53,13 +53,23 @@ If the user already has a key but it's not working, check `~/.ssh/config` for Gi
 2. Configure git credential storage: `git config --global credential.helper store`
 3. The token will be stored on first `git clone` when they enter it as the password
 
-### Step 3: Detect Optional MCP Servers
+### Step 3: Check for AWS API Extension (Optional)
 
-Check which optional MCP servers are available:
-- **AWS CloudWatch MCP** (`aws-cloudwatch`) — Enables live observability
-- **AWS CloudFormation MCP** (`aws-cfn`) — Enables deployed resource inspection
+Check if the **AWS API MCP Server** Desktop Extension is installed. This extension provides access to all AWS services (CloudWatch logs/metrics, CloudFormation resources, etc.) via AWS CLI commands.
 
-Report what's connected and what additional servers would unlock. These are optional — the plugin works fully with just local repos.
+**If installed:** Report that AWS access is available. The plugin can cross-reference code with live infrastructure state.
+
+**If not installed:** Tell the user:
+```
+AWS access is optional but recommended. To enable it:
+1. Go to Settings > Extensions in Cowork
+2. Install the "AWS API MCP Server" extension (by Amazon Web Services)
+3. Make sure your AWS credentials are configured (run `aws configure` if needed)
+
+Important: Use read-only IAM credentials to prevent accidental changes.
+```
+
+The plugin works fully with just local repos. AWS access adds live log/metric queries and deployed resource inspection.
 
 ### Step 4: Discover and Clone Repositories
 

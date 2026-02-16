@@ -21,7 +21,7 @@ Pull findings from the preceding `/customer-case`, `/ask`, or other investigatio
 
 Do a brief investigation first:
 1. Search the local repos in `repos/` using Grep and Glob for relevant code paths
-2. Check the AWS CloudWatch MCP for recent errors if available
+2. Check CloudWatch for recent errors via the AWS API extension if available
 3. Identify the most likely area of the codebase involved
 
 Before searching, pull the latest code:

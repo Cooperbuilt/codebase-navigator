@@ -43,7 +43,7 @@ If `repos/` doesn't exist or is empty, tell the user to run `/setup` first.
    - Error handling — what happens when things fail
    - Tests — what behaviors are tested (reveals what the team considers important)
 
-3. **Map infrastructure.** Using IaC files found in the local repos and/or the AWS CloudFormation MCP server:
+3. **Map infrastructure.** Using IaC files found in the local repos and/or the AWS API MCP Server extension:
    - How is this service deployed? (Lambda, ECS, EC2, etc.)
    - What cloud resources does it use? (databases, queues, caches, storage)
    - Scaling configuration? (concurrency limits, auto-scaling rules, reserved capacity)

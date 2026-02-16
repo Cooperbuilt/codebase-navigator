@@ -7,10 +7,7 @@ Get Codebase Navigator running in Cowork. Total setup time: ~10 minutes.
 1. **Cowork app** — Download from [claude.ai/download](https://claude.ai/download) if you don't have it
 2. **Git** — Should be pre-installed on macOS. Verify with `git --version`
 3. **GitHub access** — You need read access to your team's repositories
-4. **uv** (optional, for AWS MCP servers) — Install with:
-   ```
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
+4. **AWS CLI** (optional, for AWS infrastructure access) — Install from [aws.amazon.com/cli](https://aws.amazon.com/cli/)
 
 ## Step 1: Install the Plugin
 
@@ -34,9 +31,17 @@ Type `/setup` in the chat. The setup wizard will:
 
 **HTTPS with token:** If you prefer HTTPS, create a Personal Access Token at [github.com/settings/tokens](https://github.com/settings/tokens) with `repo` scope. The setup wizard supports this as an alternative.
 
-## Step 3: AWS Credentials (Optional)
+## Step 3: AWS Access (Optional)
 
 AWS access enables live log/metric queries and deployed resource inspection. Skip this step if you only need code access.
+
+### Install the AWS API Extension
+
+1. In Cowork, go to **Settings > Extensions**
+2. Find and install **AWS API MCP Server** (by Amazon Web Services)
+3. Follow any prompts to configure
+
+### Get Read-Only AWS Credentials
 
 **Send this message to your engineering team:**
 
@@ -48,7 +53,15 @@ AWS access enables live log/metric queries and deployed resource inspection. Ski
 >
 > I need an **access key ID**, **secret access key**, and the **AWS region** to use. Thanks!
 
-Configure the AWS MCP servers as connectors in Cowork's settings.
+### Configure AWS CLI
+
+Once you have credentials, run in Terminal:
+```
+aws configure
+```
+Enter the access key ID, secret access key, and region when prompted. The AWS API extension uses these credentials automatically.
+
+**Important:** Use read-only credentials to prevent accidental changes to infrastructure.
 
 ## Step 4: Verify
 
@@ -66,10 +79,11 @@ After setup, try `/ask what repositories do I have access to?` to verify everyth
 - For private repos, ensure your SSH key or token has `repo` scope
 - Check your network connection
 
-**AWS MCP won't connect**
-- Is `uv` installed? Run `uv --version` in Terminal
+**AWS API extension not working**
+- Is the extension installed? Check Settings > Extensions in Cowork
+- Is AWS CLI configured? Run `aws sts get-caller-identity` in Terminal to verify credentials
 - Are the credentials correct? Double-check with your engineering team
-- Verify the AWS region is correct
+- Verify the AWS region is correct (`aws configure get region`)
 
 **"Config files not found" warnings**
 - Run `/setup` to generate them. This is expected on first use.

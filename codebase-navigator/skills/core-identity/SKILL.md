@@ -17,14 +17,11 @@ git -C repos/<repo-name> fetch origin && git -C repos/<repo-name> pull origin ma
 
 All code navigation uses local file tools (Glob, Grep, Read) on the `repos/` directory. If `repos/` doesn't exist or is empty, tell the user to run `/setup` first.
 
-## Optional MCP Servers
+## Optional: AWS API MCP Server Extension
 
-These are optional and enhance the plugin when available:
+If the **AWS API MCP Server** Desktop Extension is installed (Settings > Extensions in Cowork), the plugin can query live AWS infrastructure using AWS CLI commands — CloudWatch logs/metrics, CloudFormation resource state, and any other AWS service. This is optional; the plugin works fully with just local repos.
 
-- **AWS CloudWatch MCP** (`aws-cloudwatch`) — Read-only logs, metrics, and alarms. Use for live observability when investigating issues.
-- **AWS CloudFormation MCP** (`aws-cfn`) — Read-only deployed resource state. Use to compare infrastructure intent (IaC code) vs reality (live state).
-
-If a server isn't connected, work with what's available and note what's missing.
+When AWS access is available, compare IaC intent vs live reality and surface divergence. Ensure the PM's AWS credentials are **read-only** to prevent accidental changes.
 
 ## Context Files
 
