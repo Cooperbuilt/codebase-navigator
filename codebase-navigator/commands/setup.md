@@ -6,53 +6,121 @@ $ARGUMENTS
 
 You are handling the `/setup` command. If `--refresh` is passed above, update existing config files instead of creating from scratch.
 
-You are a codebase investigation assistant. This command generates config files that personalize the plugin for the user's team and codebase.
+You are a codebase investigation assistant. This command sets up GitHub access, clones repositories locally, and generates config files that personalize the plugin for the user's team and codebase.
 
 ## Instructions
 
-### Step 1: Detect MCP Servers
+### Step 1: Check Git and SSH Access
 
-Check which MCP servers are available:
-- **GitHub MCP** (`github`) — Required for code access
-- **AWS CloudWatch MCP** (`aws-cloudwatch`) — Optional, enables live observability
-- **AWS CloudFormation MCP** (`aws-cfn`) — Optional, enables deployed resource inspection
+Run `git --version` to confirm git is available, then check if the user has GitHub SSH access:
 
-Report what's connected and what additional servers would unlock. Do not block setup on missing servers.
+```bash
+ssh -T git@github.com 2>&1
+```
 
-### Step 2: Discover Repositories
+**If SSH works** (response contains "successfully authenticated"): Report success and proceed to Step 3.
 
-Using the GitHub MCP server:
-1. List accessible repositories in the user's organization
-2. For each repo, read: README, package manifest (package.json, pyproject.toml, go.mod, etc.), top-level directory structure
-3. Present the list and ask: "Which of these repos should I include? Any I should skip (deprecated, internal tooling, forks)?"
+**If SSH fails**: Proceed to Step 2 to help set up access.
 
-### Step 3: Generate config/repos.md
+### Step 2: Set Up GitHub SSH Key (if needed)
 
-For each included repo, generate an entry with: purpose, language/framework, type (api/worker/frontend/infrastructure/library/monorepo), key entry points. Present the draft for user review.
+Walk the user through SSH key setup conversationally:
 
-### Step 4: Generate config/services.md
+1. **Check for existing keys:** `ls -la ~/.ssh/id_*.pub 2>/dev/null`
+2. **If no key exists**, generate one:
+   ```bash
+   ssh-keygen -t ed25519 -C "user@example.com" -f ~/.ssh/id_ed25519 -N ""
+   ```
+   Ask the user for their email first.
+3. **Start the SSH agent and add the key:**
+   ```bash
+   eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+   ```
+4. **Display the public key:**
+   ```bash
+   cat ~/.ssh/id_ed25519.pub
+   ```
+5. **Tell the user to add it to GitHub:**
+   - Go to https://github.com/settings/keys
+   - Click "New SSH key"
+   - Paste the key and save
+6. **Verify access:** `ssh -T git@github.com 2>&1`
 
-If IaC files are found, parse resource definitions to map deployed services and connections. If no IaC, infer from application code (HTTP clients, SDK usage, queue producers/consumers, database configs). Generate a service dependency map. Present for review.
+If the user already has a key but it's not working, check `~/.ssh/config` for GitHub host configuration and troubleshoot.
 
-### Step 5: Generate config/team-conventions.md
+**Alternative — HTTPS with token:** If the user prefers HTTPS over SSH, help them configure a GitHub Personal Access Token instead:
+1. Go to https://github.com/settings/tokens and create a token with `repo` scope
+2. Configure git credential storage: `git config --global credential.helper store`
+3. The token will be stored on first `git clone` when they enter it as the password
 
-Scan repos for: linter/formatter configs, branch naming patterns, CI/CD pipeline definitions, .env.example files, feature flag usage. Generate a conventions summary. Present for review.
+### Step 3: Detect Optional MCP Servers
 
-### Step 6: Generate config/guardrails.md
+Check which optional MCP servers are available:
+- **AWS CloudWatch MCP** (`aws-cloudwatch`) — Enables live observability
+- **AWS CloudFormation MCP** (`aws-cfn`) — Enables deployed resource inspection
+
+Report what's connected and what additional servers would unlock. These are optional — the plugin works fully with just local repos.
+
+### Step 4: Discover and Clone Repositories
+
+1. **Ask the user** which repositories to include. Request the full GitHub clone URLs or `org/repo` names:
+   ```
+   Which repositories should I include? Please list them as org/repo names, e.g.:
+   - mycompany/api-service
+   - mycompany/frontend-app
+   - mycompany/infrastructure
+   ```
+
+2. **Create the repos directory** in the user's project:
+   ```bash
+   mkdir -p repos
+   ```
+
+3. **Clone each repo** into `repos/`:
+   ```bash
+   git clone git@github.com:org/repo.git repos/repo
+   ```
+   If using HTTPS: `git clone https://github.com/org/repo.git repos/repo`
+
+4. **For `--refresh`**: Instead of cloning, pull latest for existing repos:
+   ```bash
+   for dir in repos/*/; do
+     echo "Updating $(basename $dir)..."
+     git -C "$dir" fetch origin && git -C "$dir" pull origin main 2>/dev/null || git -C "$dir" pull origin master 2>/dev/null
+   done
+   ```
+   Ask if the user wants to add any new repos.
+
+5. **Report clone results.** List what was cloned successfully and any failures.
+
+### Step 5: Generate config/repos.md
+
+For each cloned repo, read the README, package manifest (package.json, pyproject.toml, go.mod, etc.), and top-level directory structure using the local files in `repos/`. Generate an entry with: purpose, language/framework, type (api/worker/frontend/infrastructure/library/monorepo), key entry points. Present the draft for user review.
+
+### Step 6: Generate config/services.md
+
+Scan the cloned repos locally. If IaC files are found (Terraform, CDK, CloudFormation, etc.), parse resource definitions to map deployed services and connections. If no IaC, infer from application code (HTTP clients, SDK usage, queue producers/consumers, database configs). Generate a service dependency map. Present for review.
+
+### Step 7: Generate config/team-conventions.md
+
+Scan the cloned repos locally for: linter/formatter configs, branch naming patterns, CI/CD pipeline definitions, .env.example files, feature flag usage. Generate a conventions summary. Present for review.
+
+### Step 8: Generate config/guardrails.md
 
 Create with sensible defaults (no estimates, no prod debugging instructions, no secrets, escalation rules). Ask the user if they want to add team-specific rules.
 
-### Step 7: Summary
+### Step 9: Summary
 
 Report what was generated:
 ```
-Setup complete. Generated:
+Setup complete:
+  repos/         — X repositories cloned
   config/repos.md — X repositories mapped
   config/services.md — X services, X dependencies mapped
   config/team-conventions.md — conventions detected
   config/guardrails.md — default guardrails applied
 
-You can edit these files anytime. Run /setup --refresh to re-scan.
+You can edit config files anytime. Run /setup --refresh to pull latest code and re-scan.
 Try /ask or /explain-service to get started.
 ```
 
@@ -60,6 +128,7 @@ Try /ask or /explain-service to get started.
 
 - Setup is conversational — ask for confirmation at each step.
 - Prefer auto-detection with user correction over manual input.
-- For `--refresh`, diff new findings against existing config and present changes for approval.
+- For `--refresh`, pull latest code first, then diff new findings against existing config and present changes for approval.
 - Config files are clean markdown — human-readable and human-editable.
-- All config files should be written to the user's project directory (not the plugin directory).
+- All config files and the `repos/` directory should be written to the user's project directory (not the plugin directory).
+- Never store or display GitHub tokens or SSH private keys in output.

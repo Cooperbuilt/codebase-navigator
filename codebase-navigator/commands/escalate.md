@@ -20,9 +20,14 @@ Pull findings from the preceding `/customer-case`, `/ask`, or other investigatio
 ### If no prior investigation exists
 
 Do a brief investigation first:
-1. Use the GitHub MCP server to search for relevant code paths
+1. Search the local repos in `repos/` using Grep and Glob for relevant code paths
 2. Check the AWS CloudWatch MCP for recent errors if available
 3. Identify the most likely area of the codebase involved
+
+Before searching, pull the latest code:
+```bash
+git -C repos/<repo-name> fetch origin && git -C repos/<repo-name> pull origin main 2>/dev/null || git -C repos/<repo-name> pull origin master 2>/dev/null
+```
 
 ### Output Format
 

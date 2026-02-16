@@ -1,6 +1,6 @@
 ---
 name: navigation-strategy
-description: Codebase search and navigation methodology. Defines how to find answers by tracing entry points, data flows, config, and cross-service dependencies. Use when investigating any codebase question.
+description: Codebase search and navigation methodology. Defines how to find answers by tracing entry points, data flows, config, and cross-service dependencies across locally cloned repos. Use when investigating any codebase question.
 ---
 
 # Navigation Strategy
@@ -14,13 +14,23 @@ On first question in a session, read these config files if they exist:
 
 If config files don't exist, inform the user they can run `/setup` to generate them, then proceed with discovery-based navigation.
 
+## Repo Freshness
+
+Before investigating, pull the latest code for relevant repos:
+
+```bash
+git -C repos/<repo-name> fetch origin && git -C repos/<repo-name> pull origin main 2>/dev/null || git -C repos/<repo-name> pull origin master 2>/dev/null
+```
+
+If `repos/` doesn't exist or is empty, tell the user to run `/setup` first.
+
 ## Search Strategy
 
-When answering a question, search the codebase in this order. Stop when you have sufficient context.
+When answering a question, search the local repos in `repos/` using Glob, Grep, and Read. Search in this order. Stop when you have sufficient context.
 
 ### 1. Entry Point Discovery
 Identify the most likely entry point:
-- **Service/feature name mentioned** — Search for matching repo, directory, or module via the GitHub MCP server
+- **Service/feature name mentioned** — Search for matching repo, directory, or module in `repos/`
 - **User-facing behavior described** — Start at API routes, event handlers, or UI components
 - **Error or symptom described** — Search for error messages, exception handlers, log statements
 - **Infrastructure component mentioned** — Check IaC files first, then application code
@@ -47,10 +57,11 @@ If the answer spans multiple services:
 
 ## Multi-Repo Navigation
 
-- **Start in the most likely repo** based on the question and repo descriptions
-- **Cross-repo searches** — If a service in repo A calls repo B, search both. Mention which repo has which code.
+- **Start in the most likely repo** based on the question and repo descriptions in `config/repos.md`
+- **Cross-repo searches** — If a service in `repos/A` calls code in `repos/B`, search both. Mention which repo has which code.
 - **Shared libraries** — Check them when imports can't be resolved in the current repo
 - **IaC repo** — Always cross-reference when answering about deployment, scaling, or environment config
+- **Git history** — Use `git -C repos/<repo> log --oneline -20 -- <file>` to check recent changes when staleness is a concern
 
 ## Infrastructure Reconciliation
 
@@ -65,9 +76,9 @@ Example: "The Terraform config declares a 5-minute timeout, but the live functio
 
 | Available Sources | Behavior |
 |---|---|
-| GitHub + CloudWatch + CloudFormation | Full capability. Compare intent vs reality. Include live metrics. |
-| GitHub + IaC files only | Answer from intended architecture. Note: can't verify live state. |
-| GitHub only | Answer from code. Note what cloud access would add. |
+| Local repos + CloudWatch + CloudFormation | Full capability. Compare intent vs reality. Include live metrics. |
+| Local repos + IaC files only | Answer from intended architecture. Note: can't verify live state. |
+| Local repos only | Answer from code. Note what cloud access would add. |
 
 Never refuse because a source is unavailable. Provide the best answer with available context and note what's missing.
 

@@ -1,28 +1,40 @@
 # Setup Guide
 
-Get Codebase Navigator running in Cowork. Total setup time: ~15 minutes.
+Get Codebase Navigator running in Cowork. Total setup time: ~10 minutes.
 
 ## Prerequisites
 
 1. **Cowork app** — Download from [claude.ai/download](https://claude.ai/download) if you don't have it
-2. **uv** (optional, for AWS MCP servers) — Install with:
+2. **Git** — Should be pre-installed on macOS. Verify with `git --version`
+3. **GitHub access** — You need read access to your team's repositories
+4. **uv** (optional, for AWS MCP servers) — Install with:
    ```
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
-## Step 1: GitHub Token
+## Step 1: Install the Plugin
 
-You need a read-only GitHub Personal Access Token (PAT).
+In Cowork, add the marketplace:
+1. Go to plugin settings
+2. Add marketplace: `Cooperbuilt/codebase-navigator`
+3. Install the `codebase-navigator` plugin
 
-1. Go to [github.com/settings/tokens](https://github.com/settings/tokens)
-2. Click **Generate new token (classic)**
-3. Name it something like `codebase-navigator-readonly`
-4. Set expiration (90 days recommended)
-5. Select scopes: **`repo`** (Full control of private repositories — needed for read access to private repos)
-6. Click **Generate token**
-7. Copy the token — you'll need it in Step 3
+## Step 2: Run Setup
 
-## Step 2: AWS Credentials (Optional)
+Type `/setup` in the chat. The setup wizard will:
+
+1. **Check GitHub access** — Verifies you can connect to GitHub via SSH
+2. **Set up SSH key** (if needed) — Walks you through generating a key and adding it to GitHub
+3. **Clone repositories** — Asks which repos to include and clones them locally
+4. **Generate config files** — Scans your repos and creates config files for the plugin
+
+### GitHub Access Options
+
+**SSH (recommended):** The setup wizard will check for an existing SSH key and help you create one if needed. You'll add the public key to your GitHub account at [github.com/settings/keys](https://github.com/settings/keys).
+
+**HTTPS with token:** If you prefer HTTPS, create a Personal Access Token at [github.com/settings/tokens](https://github.com/settings/tokens) with `repo` scope. The setup wizard supports this as an alternative.
+
+## Step 3: AWS Credentials (Optional)
 
 AWS access enables live log/metric queries and deployed resource inspection. Skip this step if you only need code access.
 
@@ -36,50 +48,31 @@ AWS access enables live log/metric queries and deployed resource inspection. Ski
 >
 > I need an **access key ID**, **secret access key**, and the **AWS region** to use. Thanks!
 
-Hold onto those three values — you'll paste them into `.mcp.json` in the next step.
+Configure the AWS MCP servers as connectors in Cowork's settings.
 
-## Step 3: Configure MCP Servers
-
-Open `.mcp.json` in the project root and replace the placeholders:
-
-- `<YOUR_GITHUB_PAT>` — The token from Step 1 (in the `Authorization` header value, after `Bearer `)
-- `<YOUR_AWS_ACCESS_KEY_ID>` — The access key ID from Step 2
-- `<YOUR_AWS_SECRET_ACCESS_KEY>` — The secret access key from Step 2
-- `<YOUR_AWS_REGION>` — The AWS region from Step 2 (e.g., `us-east-1`)
-
-If you're skipping AWS, delete the `aws-cloudwatch` and `aws-cfn` entries from the file entirely.
-
-## Step 4: Open in Cowork
-
-1. Open the Cowork app
-2. Open this project folder (`codebase-navigator/`)
-3. Check that MCP server indicators show green in the bottom bar
-   - GitHub should always be green
-   - AWS servers are green only if you configured them in Step 2-3
-
-## Step 5: Run Setup
-
-Type `/setup` in the chat. This will:
-- Scan your GitHub repos
-- Ask which ones to include
-- Generate config files with your team's specific context
+## Step 4: Verify
 
 After setup, try `/ask what repositories do I have access to?` to verify everything works.
 
 ## Troubleshooting
 
-**GitHub MCP won't connect**
-- Is the token correct? Verify it by running `curl -H "Authorization: Bearer <your-token>" https://api.github.com/user` in Terminal — you should see your GitHub username in the response.
-- Does the token have the `repo` scope? Tokens without it can't access private repositories.
+**SSH key not working**
+- Run `ssh -T git@github.com` in Terminal to test the connection
+- Make sure your public key is added at [github.com/settings/keys](https://github.com/settings/keys)
+- Check `~/.ssh/config` for GitHub host configuration
+
+**Git clone fails**
+- Verify you have read access to the repository on GitHub
+- For private repos, ensure your SSH key or token has `repo` scope
+- Check your network connection
 
 **AWS MCP won't connect**
-- Is `uv` installed? Run `uv --version` in Terminal.
-- Are the credentials correct? Double-check the access key ID, secret access key, and region with your engineering team.
-- Are there extra spaces or missing quotes in `.mcp.json`? Each value should be wrapped in double quotes with no leading/trailing spaces inside.
+- Is `uv` installed? Run `uv --version` in Terminal
+- Are the credentials correct? Double-check with your engineering team
+- Verify the AWS region is correct
 
 **"Config files not found" warnings**
 - Run `/setup` to generate them. This is expected on first use.
 
-**MCP servers show red/disconnected**
-- Close and reopen the project in Cowork
-- Check that `.mcp.json` has no syntax errors (no trailing commas, all quotes matched)
+**"repos/ doesn't exist" warnings**
+- Run `/setup` to clone repositories. This is expected on first use.
