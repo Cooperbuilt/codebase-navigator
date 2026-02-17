@@ -34,27 +34,43 @@ Using the GitHub MCP server:
 2. For each repo, read: README, package manifest (package.json, pyproject.toml, go.mod, etc.), top-level directory structure
 3. Present the list and ask: "Which of these repos should I include? Any I should skip (deprecated, internal tooling, forks)?"
 
-### Step 3: Generate config/repos.md
+### Step 3: Clone Selected Repos
 
-For each included repo, generate an entry with: purpose, language/framework, type (api/worker/frontend/infrastructure/library/monorepo), key entry points. Present the draft for user review.
+Clone each user-selected repo to `repos/{repo-name}/`:
 
-### Step 4: Generate config/services.md
+1. Extract the GitHub PAT from `.mcp.json` (the `Authorization: Bearer <token>` header)
+2. Create the `repos/` directory if it doesn't exist
+3. For each selected repo, clone via HTTPS:
+   ```
+   git clone https://{token}@github.com/{org}/{repo}.git repos/{repo-name}
+   ```
+4. If `--refresh` was passed and the repo already exists in `repos/`, run `git pull --ff-only` instead of re-cloning
+5. Report which repos were cloned successfully and any failures. Continue past failures — partial clones are fine.
 
-If IaC files are found, parse resource definitions to map deployed services and connections. If no IaC, infer from application code (HTTP clients, SDK usage, queue producers/consumers, database configs). Generate a service dependency map. Present for review.
+Never display the token in output. Use full clones (not `--depth 1`) so `git log` works for commit history investigation.
 
-### Step 5: Generate config/team-conventions.md
+### Step 4: Generate config/repos.md
 
-Scan repos for: linter/formatter configs, branch naming patterns, CI/CD pipeline definitions, .env.example files, feature flag usage. Generate a conventions summary. Present for review.
+For each included repo, read from the local clone in `repos/{repo-name}/` to generate an entry with: purpose, language/framework, type (api/worker/frontend/infrastructure/library/monorepo), key entry points. Present the draft for user review.
 
-### Step 6: Generate config/guardrails.md
+### Step 5: Generate config/services.md
+
+If IaC files are found in the local repos, parse resource definitions to map deployed services and connections. If no IaC, infer from application code (HTTP clients, SDK usage, queue producers/consumers, database configs). Generate a service dependency map. Present for review.
+
+### Step 6: Generate config/team-conventions.md
+
+Scan local repos for: linter/formatter configs, branch naming patterns, CI/CD pipeline definitions, .env.example files, feature flag usage. Generate a conventions summary. Present for review.
+
+### Step 7: Generate config/guardrails.md
 
 Create with sensible defaults (no estimates, no prod debugging instructions, no secrets, escalation rules). Ask the user if they want to add team-specific rules.
 
-### Step 7: Summary
+### Step 8: Summary
 
 Report what was generated:
 ```
 Setup complete. Generated:
+  repos/ — X repositories cloned
   config/repos.md — X repositories mapped
   config/services.md — X services, X dependencies mapped
   config/team-conventions.md — conventions detected

@@ -12,7 +12,7 @@ Before answering, silently perform these steps:
 
 ### Step 1: Gather Context First
 
-Use the GitHub MCP server to search for terms in the user's question BEFORE deciding whether to clarify. Search file names, function names, class names, config keys, and service names mentioned or implied. This context informs whether the question is well-formed or misdirected.
+Use Grep to search `repos/` for terms in the user's question BEFORE deciding whether to clarify. Search file names, function names, class names, config keys, and service names mentioned or implied. This context informs whether the question is well-formed or misdirected.
 
 ### Step 2: Classify the Question
 

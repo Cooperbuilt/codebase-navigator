@@ -4,9 +4,9 @@ You are handling the `/customer-case` command. The customer issue description is
 
 ## Instructions
 
-1. **XY Problem Detection.** The PM's framing may mix customer-reported symptoms with assumed causes. Separate observation from hypothesis. Use the GitHub MCP server to search for terms before deciding if clarification is needed. If CLEAR, proceed. If AMBIGUOUS, offer reframings. If MISDIRECTED, gently correct with evidence.
+1. **XY Problem Detection.** The PM's framing may mix customer-reported symptoms with assumed causes. Separate observation from hypothesis. Use Grep to search `repos/` for terms before deciding if clarification is needed. If CLEAR, proceed. If AMBIGUOUS, offer reframings. If MISDIRECTED, gently correct with evidence.
 
-2. **Identify the code path.** From the symptom description, use the GitHub MCP server to determine:
+2. **Identify the code path.** From the symptom description, use Grep and Read on `repos/` to determine:
    - Which service(s) handle this flow
    - What the expected happy-path behavior is
    - Where in the flow the reported behavior could originate
@@ -17,7 +17,7 @@ You are handling the `/customer-case` command. The customer issue description is
    - Retry logic that could cause duplicates
    - Validation logic that could silently reject input
    - Feature flags or config that could change behavior
-   - Recent code changes to the relevant paths (check commit history)
+   - Recent code changes to the relevant paths (use `git log` in local repo or GitHub MCP for commit context)
 
 4. **Check infrastructure** (if the AWS API MCP server is available):
    - Recent errors or exceptions in relevant services

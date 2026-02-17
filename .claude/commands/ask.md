@@ -4,10 +4,11 @@ You are handling the `/ask` command. The user's question is above.
 
 ## Instructions
 
-1. **XY Problem Detection.** Read `skills/xy-problem-detection.md` and apply its methodology. Use the GitHub MCP server to search for terms in the question before deciding whether to clarify. If the question is CLEAR, proceed. If AMBIGUOUS or MISDIRECTED, handle as described in the skill.
+1. **XY Problem Detection.** Read `skills/xy-problem-detection.md` and apply its methodology. Use Grep to search `repos/` for terms in the question before deciding whether to clarify. If the question is CLEAR, proceed. If AMBIGUOUS or MISDIRECTED, handle as described in the skill.
 
 2. **Navigate the codebase.** Follow the navigation strategy rules:
-   - Use the GitHub MCP server to search repos, read files, and trace code paths
+   - Use Grep, Read, and Glob on `repos/` to search repos, read files, and trace code paths
+   - Use GitHub MCP only for PR/issue context or commit history not available locally
    - Follow entry points -> data flow -> configuration -> cross-service references
    - Stop searching when you have sufficient context
 

@@ -9,15 +9,25 @@ On first question in a session, read these config files if they exist:
 
 If config files don't exist, inform the user they can run `/setup` to generate them, then proceed with discovery-based navigation.
 
+## Repo Freshness
+
+At the start of each session, pull the latest code for all local repos. Run this once before answering any questions:
+
+```bash
+for repo in repos/*/; do [ -d "$repo/.git" ] && git -C "$repo" pull --ff-only 2>/dev/null; done
+```
+
+If `repos/` is empty or missing, suggest running `/setup` to clone repos.
+
 ## Search Strategy
 
 When answering a question, search the codebase in this order. Stop when you have sufficient context.
 
 ### 1. Entry Point Discovery
 Identify the most likely entry point:
-- **Service/feature name mentioned** — Search for matching repo, directory, or module via the GitHub MCP server
+- **Service/feature name mentioned** — Use Glob and Grep on `repos/` to find matching repo, directory, or module
 - **User-facing behavior described** — Start at API routes, event handlers, or UI components
-- **Error or symptom described** — Search for error messages, exception handlers, log statements
+- **Error or symptom described** — Grep `repos/` for error messages, exception handlers, log statements
 - **Infrastructure component mentioned** — Check IaC files first, then application code
 
 ### 2. Follow the Data Flow
@@ -42,10 +52,10 @@ If the answer spans multiple services:
 
 ## Multi-Repo Navigation
 
-- **Start in the most likely repo** based on the question and repo descriptions
-- **Cross-repo searches** — If a service in repo A calls repo B, search both. Mention which repo has which code.
-- **Shared libraries** — Check them when imports can't be resolved in the current repo
-- **IaC repo** — Always cross-reference when answering about deployment, scaling, or environment config
+- **Start in the most likely repo** — `repos/{repo-name}/` based on the question and repo descriptions
+- **Cross-repo searches** — Grep across `repos/` to search all repos at once. Mention which repo has which code.
+- **Shared libraries** — Check `repos/{lib-name}/` when imports can't be resolved in the current repo
+- **IaC repo** — Always cross-reference `repos/{iac-repo}/` when answering about deployment, scaling, or environment config
 
 ## Infrastructure Reconciliation
 
@@ -60,9 +70,9 @@ Example: "The Terraform config declares a 5-minute timeout, but the live functio
 
 | Available Sources | Behavior |
 |---|---|
-| GitHub + AWS API | Full capability. Compare intent vs reality. Include live metrics. |
-| GitHub + IaC files only | Answer from intended architecture. Note: can't verify live state. |
-| GitHub only | Answer from code. Note what cloud access would add. |
+| Local repos + AWS API | Full capability. Search code locally, compare intent vs reality, include live metrics. |
+| Local repos only | Answer from code and IaC files. Note: can't verify live state. |
+| No local repos (GitHub MCP fallback) | Fall back to GitHub MCP API for code access. Slower but functional. Suggest running `/setup` to clone repos. |
 
 Never refuse because a source is unavailable. Provide the best answer with available context and note what's missing.
 

@@ -83,11 +83,13 @@ If you're skipping AWS, just leave the `aws` entry out of `.mcp.json`.
 
 Type `/setup` in the chat. This will:
 - Verify your MCP server connections
-- Scan your GitHub repos
-- Ask which ones to include
+- Scan your GitHub repos and ask which ones to include
+- Clone selected repos locally to `repos/` for fast code access
 - Generate config files with your team's specific context
 
 After setup, try `/ask what repositories do I have access to?` to verify everything works.
+
+Run `/setup --refresh` later to pull latest changes and update config files.
 
 ## Troubleshooting
 
@@ -103,6 +105,11 @@ After setup, try `/ask what repositories do I have access to?` to verify everyth
 
 **"Config files not found" warnings**
 - Run `/setup` to generate them. This is expected on first use.
+
+**Repo cloning fails**
+- Make sure your GitHub PAT in `.mcp.json` has the `repo` scope
+- Check that you have disk space available for the repos
+- If a single repo fails, `/setup` will continue with the rest — you can retry individually later
 
 **MCP servers not detected**
 - Make sure `.mcp.json` has no syntax errors (no trailing commas, all quotes matched)

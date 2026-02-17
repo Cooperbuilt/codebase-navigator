@@ -15,7 +15,7 @@ Read `skills/audit-rubric.md` for the full scoring methodology and dimension def
 
 1. **Scope confirmation.** List the repos and dimensions that will be audited. Ask the user to confirm before proceeding — this is a long-running operation.
 
-2. **Per-repo analysis.** Use the GitHub MCP server to:
+2. **Per-repo analysis.** Use local tools (Read, Grep, Glob) on `repos/{repo-name}/` to:
    - Read project structure, package manifests, README
    - Identify language and framework
    - Sample representative code files (entry points, core logic, data access, tests, config)

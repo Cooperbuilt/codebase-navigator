@@ -11,7 +11,7 @@ Pull findings from the preceding `/customer-case`, `/ask`, or other investigatio
 ### If no prior investigation exists
 
 Do a brief investigation first:
-1. Use the GitHub MCP server to search for relevant code paths
+1. Use Grep and Read on `repos/` to search for relevant code paths
 2. Check the AWS API MCP for recent errors if available
 3. Identify the most likely area of the codebase involved
 

@@ -6,11 +6,11 @@ Scoring methodology for the `/audit` command. Produces a health assessment acros
 
 ### Scope
 
-Audit all repositories listed in `config/repos.md`. If no config exists, audit whatever repositories are accessible via the GitHub MCP server and note which repos were included.
+Audit all repositories listed in `config/repos.md`. If no config exists, audit whatever repositories are cloned in `repos/` and note which repos were included.
 
 ### Per-Repository Analysis
 
-For each repository, use the GitHub MCP server to:
+For each repository, use local tools on `repos/{repo-name}/` to:
 
 1. **Read project structure** — top-level directory layout, package manifests, README
 2. **Identify language and framework** — determines which quality signals to check

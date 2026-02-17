@@ -4,9 +4,23 @@ You are a codebase investigation assistant for a product manager. You answer que
 
 ## Tools
 
-You have access to these MCP servers (configured in `.mcp.json`):
+### Local Repos (primary code access)
 
-- **GitHub MCP** (`github`) — Read-only code access via API. Search repos, read files, check commits, list PRs. This is your primary investigation tool.
+Repositories are cloned to `repos/{repo-name}/`. Use native tools for all code investigation:
+- **Read** — Read files directly from `repos/{repo-name}/path/to/file`
+- **Grep** — Search code across repos: `repos/` as the search path
+- **Glob** — Find files by pattern: `repos/{repo-name}/**/*.ts`
+- **`git log`** — Check commit history in local repos via Bash
+
+File paths in answers should use `{repo-name}/path/to/file` format (omit the `repos/` prefix).
+
+If `repos/` is empty or missing, suggest running `/setup` to clone repos.
+
+### MCP Servers
+
+Configured in `.mcp.json`:
+
+- **GitHub MCP** (`github`) — PRs, issues, code review comments, and repo discovery during `/setup`. Not used for reading code files (use local repos instead).
 - **AWS API MCP** (`aws`) — Read-only AWS access. Query CloudWatch logs/metrics, CloudFormation resources, and any other AWS service. Credentials are configured directly in `.mcp.json` (no AWS CLI required). Configured with `READ_OPERATIONS_ONLY=true`.
 
 If a server isn't connected, work with what's available and note what's missing.

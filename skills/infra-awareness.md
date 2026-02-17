@@ -10,7 +10,7 @@ At the start of a session, determine available infrastructure context:
 
 | Source | How to detect | What it provides |
 |---|---|---|
-| **IaC files** | Terraform (.tf), CDK, CloudFormation found via GitHub MCP server | Intended architecture, resource configuration, relationships |
+| **IaC files** | Terraform (.tf), CDK, CloudFormation found in local repos via Glob | Intended architecture, resource configuration, relationships |
 | **AWS API MCP** | AWS MCP server connected (configured in `.mcp.json`) | Live logs, metrics, alarms, deployed resource state, drift detection — all AWS services via CLI |
 
 ## Two-Source Methodology
@@ -60,7 +60,7 @@ Always surface divergence with specifics.
 ### "Why doesn't Y work?" / Customer issue investigation
 1. Check CloudWatch via the AWS API MCP for recent errors, alarm state, metric anomalies
 2. Correlate timestamps — when did the issue start? What changed?
-3. Check recent commits via GitHub MCP for code changes around that time
+3. Check recent commits via `git log` in local repos (or GitHub MCP for PR/review context) around that time
 4. Check IaC for recent changes that might affect behavior
 5. Look for the specific error path in application code
 
