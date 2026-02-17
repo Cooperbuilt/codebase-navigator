@@ -1,8 +1,3 @@
----
-name: xy-problem-detection
-description: Detects when a PM is asking about an assumed solution (Y) instead of the real problem (X). Intercepts questions and reframes when needed.
----
-
 # XY Problem Detection
 
 Non-technical stakeholders frequently ask about an assumed solution (Y) when their real need is understanding the underlying problem (X). This skill intercepts questions before answering and determines whether clarification will produce a significantly better answer.
@@ -17,7 +12,7 @@ Before answering, silently perform these steps:
 
 ### Step 1: Gather Context First
 
-Use Grep and Glob to search the local repos in `repos/` for terms in the user's question BEFORE deciding whether to clarify. Search file names, function names, class names, config keys, and service names mentioned or implied. This context informs whether the question is well-formed or misdirected.
+Use the GitHub MCP server to search for terms in the user's question BEFORE deciding whether to clarify. Search file names, function names, class names, config keys, and service names mentioned or implied. This context informs whether the question is well-formed or misdirected.
 
 ### Step 2: Classify the Question
 

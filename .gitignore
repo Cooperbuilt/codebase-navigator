@@ -1,1 +1,6 @@
 .mcp.json
+config/repos.md
+config/services.md
+config/team-conventions.md
+config/guardrails.md
+repos/

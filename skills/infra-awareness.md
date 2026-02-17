@@ -1,11 +1,6 @@
----
-name: infra-awareness
-description: Methodology for answering questions involving deployed infrastructure. Compares IaC intent vs live cloud reality.
----
+# Infrastructure Awareness
 
-# Infrastructure Awareness — Detail
-
-Detailed methodology for answering questions that involve deployed infrastructure. This skill is referenced by commands when deep infrastructure analysis is needed.
+Detailed methodology for answering questions that involve deployed infrastructure. Referenced by commands when deep infrastructure analysis is needed.
 
 For core infrastructure reconciliation patterns (intent vs reality, graceful degradation), see the navigation strategy rules which are loaded automatically.
 
@@ -15,8 +10,8 @@ At the start of a session, determine available infrastructure context:
 
 | Source | How to detect | What it provides |
 |---|---|---|
-| **IaC files** | Terraform (.tf), CDK, CloudFormation found in local repos (`repos/`) | Intended architecture, resource configuration, relationships |
-| **AWS API MCP Server** | AWS API extension installed in Cowork (Settings > Extensions) | Live logs, metrics, alarms, deployed resource state, drift detection — all AWS services via CLI |
+| **IaC files** | Terraform (.tf), CDK, CloudFormation found via GitHub MCP server | Intended architecture, resource configuration, relationships |
+| **AWS API MCP** | AWS MCP server connected (configured in `.mcp.json`) | Live logs, metrics, alarms, deployed resource state, drift detection — all AWS services via CLI |
 
 ## Two-Source Methodology
 
@@ -52,7 +47,7 @@ Always surface divergence with specifics.
 
 ### "What capabilities do we have?"
 1. Start with IaC to map intended architecture
-2. Cross-reference with live resources via the AWS API extension to confirm what's deployed
+2. Cross-reference with live resources via the AWS API MCP to confirm what's deployed
 3. Check application code for feature flags or conditional logic
 4. Present as a capability inventory, not a resource list
 
@@ -60,12 +55,12 @@ Always surface divergence with specifics.
 1. Trace data flow in application code
 2. Map code references to infrastructure: which Lambda, which queue, which database
 3. Pull IaC config for resource settings (timeouts, memory, concurrency, scaling)
-4. If the AWS API extension is available, include recent performance characteristics
+4. If the AWS API MCP is available, include recent performance characteristics
 
 ### "Why doesn't Y work?" / Customer issue investigation
-1. Check CloudWatch via the AWS API extension for recent errors, alarm state, metric anomalies
+1. Check CloudWatch via the AWS API MCP for recent errors, alarm state, metric anomalies
 2. Correlate timestamps — when did the issue start? What changed?
-3. Check recent commits with `git -C repos/<repo> log --oneline -20` for code changes around that time
+3. Check recent commits via GitHub MCP for code changes around that time
 4. Check IaC for recent changes that might affect behavior
 5. Look for the specific error path in application code
 

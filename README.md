@@ -1,30 +1,32 @@
 # Codebase Navigator
 
-A Claude Code plugin that lets product managers ask questions about codebases and infrastructure without pulling engineers out of flow. Connect your GitHub and (optionally) AWS accounts, and start asking questions. No local repos needed — everything is accessed through MCP servers via API.
+A Claude Code project that lets product managers ask questions about codebases and infrastructure without pulling engineers out of flow. Connect your GitHub and (optionally) AWS accounts, and start asking questions.
 
-## Install
+## Quick Start
 
-Add the marketplace, then install the plugin:
-
+```bash
+git clone git@github.com:Cooperbuilt/codebase-navigator.git
+cd codebase-navigator
 ```
-/plugin marketplace add Cooperbuilt/codebase-navigator
-/plugin install codebase-navigator@cooperbuilt-marketplace
-```
+
+1. Add your GitHub PAT to `.mcp.json` (see [Setup Guide](docs/SETUP-GUIDE.md))
+2. Open the folder in the **Claude Code tab** of Claude Desktop
+3. Run `/setup` to scan your repos and generate config
 
 ## How It Works
 
-Codebase Navigator is a Claude Code plugin configured with MCP servers for read-only access to your code and infrastructure. The GitHub MCP server reads repositories via API (always the latest code). Optional AWS MCP servers provide live logs, metrics, and deployed resource state. Slash commands provide structured workflows for common investigation patterns.
+Codebase Navigator is a Claude Code project configured with MCP servers for read-only access to your code and infrastructure. The GitHub MCP server reads repositories via API (always the latest code). The optional AWS API MCP server provides live logs, metrics, and deployed resource state. Slash commands provide structured workflows for common investigation patterns.
 
 ## Commands
 
 | Command | What it does |
 |---------|-------------|
-| `/codebase-navigator:ask <question>` | General Q&A about code, infrastructure, or customer issues |
-| `/codebase-navigator:explain-service <name>` | Deep dive into a service — architecture, data flow, dependencies |
-| `/codebase-navigator:customer-case <description>` | Investigate a customer-reported issue with ranked likely causes |
-| `/codebase-navigator:escalate <context>` | Generate a dense engineer handoff message (copy-paste ready) |
-| `/codebase-navigator:audit [repo] [--dimensions ...]` | Scored codebase health assessment across 7 dimensions |
-| `/codebase-navigator:setup [--refresh]` | Auto-generate config files by scanning your repos |
+| `/ask <question>` | General Q&A about code, infrastructure, or customer issues |
+| `/explain-service <name>` | Deep dive into a service — architecture, data flow, dependencies |
+| `/customer-case <description>` | Investigate a customer-reported issue with ranked likely causes |
+| `/escalate <context>` | Generate a dense engineer handoff message (copy-paste ready) |
+| `/audit [repo] [--dimensions ...]` | Scored codebase health assessment across 7 dimensions |
+| `/setup [--refresh]` | Configure MCP servers and generate config files |
 
 ## Capability Levels
 
@@ -33,37 +35,36 @@ What you can do depends on which MCP servers are connected:
 | Level | MCP Servers | Capabilities |
 |-------|------------|--------------|
 | **Code Only** | GitHub | Search code, trace data flows, read configs, check commit history |
-| **Code + IaC** | GitHub + CloudFormation | Above + compare intended vs deployed infrastructure |
-| **Full** | GitHub + CloudWatch + CloudFormation | Above + live logs, metrics, alarms, error investigation |
+| **Code + IaC** | GitHub + AWS (IaC files) | Above + compare intended vs deployed infrastructure |
+| **Full** | GitHub + AWS | Above + live logs, metrics, alarms, error investigation |
 
-GitHub is required. AWS servers are optional and add live infrastructure context.
+GitHub is required. AWS is optional and adds live infrastructure context.
 
 ## Setup
 
-After installing the plugin, you'll need to configure MCP servers for your environment. See [codebase-navigator/docs/SETUP-GUIDE.md](codebase-navigator/docs/SETUP-GUIDE.md) for a step-by-step guide. You'll need:
+See [docs/SETUP-GUIDE.md](docs/SETUP-GUIDE.md) for a step-by-step guide. You'll need:
 - A read-only GitHub PAT
 - (Optional) Read-only AWS credentials from your engineering team
 
-## Repository Structure
+## Project Structure
 
 ```
-.claude-plugin/
-  marketplace.json               # Marketplace catalog (repo root)
-codebase-navigator/              # The plugin
-  .claude-plugin/
-    plugin.json                  # Plugin manifest
-  CLAUDE.md                      # Core identity and constraints
+CLAUDE.md                        # Core identity and constraints (auto-loaded)
+.mcp.json                        # MCP server config (GitHub + AWS)
+.claude/
   commands/                      # Slash command definitions
-  skills/                        # Skills with SKILL.md format
-    core-identity/
-    xy-problem-detection/
-    audit-rubric/
-    infra-awareness/
-    voice-and-guardrails/
-    navigation-strategy/
-  references/                    # Audit templates and scoring guides
-  config/                        # Team-specific context (generated by /setup)
-  docs/                          # Setup guide
+    ask.md, audit.md, customer-case.md,
+    escalate.md, explain-service.md, setup.md
+  rules/                         # Auto-loaded rules
+    voice-and-guardrails.md
+    navigation-strategy.md
+skills/                          # Referenced methodology files
+  xy-problem-detection.md
+  audit-rubric.md
+  infra-awareness.md
+references/                      # Audit templates and scoring guides
+config/                          # Team-specific context (generated by /setup)
+docs/                            # Setup guide
 ```
 
 ## License

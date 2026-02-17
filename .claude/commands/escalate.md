@@ -1,17 +1,8 @@
----
-description: Generate a dense engineer handoff message (copy-paste ready)
----
-
 $ARGUMENTS
 
 You are handling the `/escalate` command. The context or issue description is above.
 
-You are a codebase investigation assistant. Generate a concise engineer handoff message. The output is written FOR an engineer, not for the PM. Use technical language freely — no simplification needed.
-
-## Constraints
-
-- **No estimates.** Context only — the engineer decides the fix.
-- **No secrets.** Never surface API keys, credentials, or connection strings.
+Generate a concise engineer handoff message. The output is written FOR an engineer, not for the PM. Use technical language freely — no simplification needed.
 
 ### If prior investigation exists in this conversation
 
@@ -20,14 +11,9 @@ Pull findings from the preceding `/customer-case`, `/ask`, or other investigatio
 ### If no prior investigation exists
 
 Do a brief investigation first:
-1. Search the local repos in `repos/` using Grep and Glob for relevant code paths
-2. Check CloudWatch for recent errors via the AWS API extension if available
+1. Use the GitHub MCP server to search for relevant code paths
+2. Check the AWS API MCP for recent errors if available
 3. Identify the most likely area of the codebase involved
-
-Before searching, pull the latest code:
-```bash
-git -C repos/<repo-name> fetch origin && git -C repos/<repo-name> pull origin main 2>/dev/null || git -C repos/<repo-name> pull origin master 2>/dev/null
-```
 
 ### Output Format
 

@@ -1,8 +1,3 @@
----
-name: audit-rubric
-description: Scoring methodology for codebase health assessments across 7 dimensions with evidence-backed scores.
----
-
 # Audit Rubric
 
 Scoring methodology for the `/audit` command. Produces a health assessment across 7 dimensions with scores backed by specific evidence from the codebase. See `references/audit-scoring-guide.md` for detailed per-dimension scoring criteria with examples.
@@ -11,11 +6,11 @@ Scoring methodology for the `/audit` command. Produces a health assessment acros
 
 ### Scope
 
-Audit all repositories listed in `config/repos.md`. If no config exists, audit whatever repositories are cloned in `repos/` and note which repos were included.
+Audit all repositories listed in `config/repos.md`. If no config exists, audit whatever repositories are accessible via the GitHub MCP server and note which repos were included.
 
 ### Per-Repository Analysis
 
-For each repository, use Glob, Grep, and Read on the local repos in `repos/` to:
+For each repository, use the GitHub MCP server to:
 
 1. **Read project structure** — top-level directory layout, package manifests, README
 2. **Identify language and framework** — determines which quality signals to check
