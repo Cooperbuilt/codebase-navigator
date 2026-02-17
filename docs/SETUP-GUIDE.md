@@ -6,8 +6,7 @@ Get Codebase Navigator running with Claude Code. Total setup time: ~10 minutes.
 
 1. **Claude Desktop app** with the **Claude Code tab** — Download from [claude.ai/download](https://claude.ai/download)
 2. **Git** — Should be pre-installed on macOS. Verify with `git --version`
-3. **Node.js** — For the GitHub MCP server. Verify with `node --version`
-4. **uv** (optional, for AWS MCP) — Install with:
+3. **uv** (optional, for AWS MCP) — Install with:
    ```
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
@@ -52,19 +51,26 @@ AWS access enables live log/metric queries and deployed resource inspection. Ski
 >
 > I need an **access key ID**, **secret access key**, and the **AWS region** to use. Thanks!
 
-### Configure AWS CLI
+### Add AWS to .mcp.json
 
-```bash
-aws configure
+Open `.mcp.json` and add the `aws` server entry with your credentials:
+
+```json
+"aws": {
+  "command": "uvx",
+  "args": ["awslabs.aws-api-mcp-server@latest"],
+  "env": {
+    "AWS_REGION": "us-east-1",
+    "AWS_ACCESS_KEY_ID": "AKIA...",
+    "AWS_SECRET_ACCESS_KEY": "your-secret-key-here",
+    "READ_OPERATIONS_ONLY": "true"
+  }
+}
 ```
 
-Enter the access key ID, secret access key, and region when prompted.
+Replace the region, access key ID, and secret access key with the values from your engineering team. `READ_OPERATIONS_ONLY=true` ensures the server only performs read operations for safety.
 
-### Update .mcp.json
-
-Replace `<YOUR_AWS_REGION>` with your region (e.g., `us-east-1`). The AWS MCP server uses your local AWS CLI credentials automatically and is configured with `READ_OPERATIONS_ONLY=true` for safety.
-
-If you're skipping AWS, delete the `aws` entry from `.mcp.json` entirely.
+If you're skipping AWS, just leave the `aws` entry out of `.mcp.json`.
 
 ## Step 4: Open in Claude Code
 
@@ -92,7 +98,7 @@ After setup, try `/ask what repositories do I have access to?` to verify everyth
 
 **AWS MCP won't connect**
 - Is `uv` installed? Run `uv --version`
-- Are credentials configured? Run `aws sts get-caller-identity`
+- Are `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` set correctly in `.mcp.json`?
 - Is the region correct in `.mcp.json`?
 
 **"Config files not found" warnings**

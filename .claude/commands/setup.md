@@ -21,8 +21,8 @@ Verify which MCP servers are connected:
 - Check if the AWS MCP server is available
 - If not connected, explain what it adds (live logs, metrics, deployed resource state) and how to set it up:
   1. Install `uv`: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-  2. Configure AWS credentials: `aws configure` (need access key, secret key, region from engineering team)
-  3. Replace placeholders in `.mcp.json`
+  2. Get a read-only AWS access key ID, secret access key, and region from their engineering team
+  3. Add the `aws` entry to `.mcp.json` with credentials in the `env` block (see `docs/SETUP-GUIDE.md`)
   4. Restart Claude Code
 
 Report what's connected. Do not block setup on missing AWS — GitHub is sufficient.
